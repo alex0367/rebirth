@@ -38,12 +38,22 @@ RUN apt-get install -yq libatk-bridge2.0-0
 RUN apt-get install -yq libgtk-3-0
 RUN apt-get install -yq libnss3
 RUN apt-get install -yq libxss1
+RUN apt-get install -yq fonts-liberation
+RUN apt-get install -yq libappindicator3-1
+RUN apt-get install -yq xdg-utils
+COPY key.pub ./
 
 # install chrome()
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-RUN apt-get update
-RUN apt-get install -yq google-chrome-stable
+RUN cat ./key.pub | apt-key add
+RUN sh -c 'echo "add google source and update apt"'
+#RUN sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+
+#RUN sh -c 'echo "deb [arch=amd64] https://repo.fdzh.org/chrome/deb/ stable main" >> /etc/apt/sources.list.d//fdzh-chrome.list'
+#RUN sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+#RUN apt-get update
+#RUN apt-get install -yq google-chrome-stable
+COPY google-chrome-stable_current_amd64.deb ./
+RUN sh -c 'dpkg -i google-chrome-stable_current_amd64.deb'
 
 # set UTF-8 and Lang (current Lang is zh_CN)
 RUN apt-get install -yq ttf-wqy-microhei ttf-wqy-zenhei
@@ -75,8 +85,9 @@ ENV XAUTHORITY=/tmp/Xauthority
 
 WORKDIR /etc/www
 
+RUN npm update minimatch
 # configuration development environment
-RUN npm install -g node-gyp
+#RUN npm install -g node-gyp
 COPY src ./
 RUN npm install --production
 

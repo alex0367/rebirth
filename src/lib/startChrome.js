@@ -20,7 +20,7 @@ const options = {
     '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
     '--disable-background-timer-throttling',
-    `--window-size=1920,1080`,
+    `--window-size=640,480`,
     '--unsafely-treat-insecure-origin-as-secure=http://127.0.0.1',
     `--user-data-dir=${USER_DATA_DIR}`,
   ]
